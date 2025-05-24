@@ -1,4 +1,6 @@
 import express from "express";
+import cors from "cors";
+
 import waterTankRoutes from "./routes/water-tank";
 import usersRouter from "./routes/users";
 import referenceValueRouters from "./routes/reference-value";
@@ -6,6 +8,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
