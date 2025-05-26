@@ -20,8 +20,8 @@ export const getWaterTankEntries = async (
   next: NextFunction,
 ) => {
   try {
-    const entries = await waterTankService.getWaterTankEntries();
-    res.status(200).json(entries);
+    const entries = await waterTankService.getWaterTankEntries(req.query);
+    res.status(200).json(entries[0]);
   } catch (e) {
     next(e);
   }
