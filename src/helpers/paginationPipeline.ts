@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery } from "mongoose";
+import type { PipelineStage } from "mongoose";
 
 export const paginationPipeline = <T extends Record<string, any>>(
   page = "1",
   pageSize = 10,
   filter: FilterQuery<T> = {},
-) => {
+): PipelineStage[] => {
   const skip = (Number(page) - 1) * pageSize;
 
   return [
@@ -14,6 +15,16 @@ export const paginationPipeline = <T extends Record<string, any>>(
         ...filter,
       },
     },
+
+    {
+      $lookup: {
+        from: "reference_values",
+        localField: "referenceValue",
+        foreignField: "_id",
+        as: "referenceValue",
+      },
+    },
+    { $unwind: "$referenceValue" },
 
     {
       $facet: {
@@ -26,6 +37,7 @@ export const paginationPipeline = <T extends Record<string, any>>(
           {
             $addFields: {
               _id: "$_id",
+              referenceValue: "$referenceValue.value",
             },
           },
         ],
