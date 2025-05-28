@@ -40,6 +40,7 @@ export const paginationPipeline = <T extends Record<string, any>>(
               referenceValue: "$referenceValue.value",
             },
           },
+          { $sort: { createdAt: -1 } },
         ],
       },
     },
